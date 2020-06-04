@@ -55,15 +55,15 @@ In this step, you will locate Just In Time Access from both the VM for which it 
 
 First, login to the Azure Portal (https://portal.azure.com) and navigate to the Virtual Machine you'll be using with Just In Time:
 
-:::image type="content" source="images/step1-1-access-azure-vm.png" alt-text="Azure Virtual Machine":::
+![Azure Virtual Machine](images/step1-1-access-azure-vm.png)
 
 Next, before Just In Time is enabled, you will see a banner at the top of the connect screen explaining that you can improve security if you enable Just In Time:
 
-:::image type="content" source="images/step1-2-just-in-time-not-enabled.png" alt-text="Just In Time can improve security when accessing VMs":::
+![Just In Time can improve security when accessing VMs](images/step1-2-just-in-time-not-enabled.png) >]
 
 Finally, visit the Azure Security Center and ensure the VMs you have chosen to use with Just In Time are enrolled in management by security Center.
 
-:::image type="content" source="images/step1-3-security-center-subscription-needed.png" alt-text="Get started with Security Center":::
+![Get started with Security Center](images/step1-3-security-center-subscription-needed.png) 
 
 If your subscription is not using the paid version of security center, the upgrade button will be available at the bottom of the getting started page. Select Upgrade to begin a 30 day trial of security center to allow selected VMs to use Just In Time.
 
@@ -81,23 +81,23 @@ The Just in time component can be enabled from the VMs configuration screen or f
 
 From an individual server, selecting Enable Just In Time Access from the VM configuration screen is the best method if you are only setting up one virtual machine.
 
-:::image type="content" source="images/Step2-1-enable-just-in-time-at-the-vm.png" alt-text="Enable JIT for an individual VM":::
+![Enable JIT for an individual VM](images/Step2-1-enable-just-in-time-at-the-vm.png) 
 
 Once the enable button is clicked, the machine will be enrolled in Just In Time - it really is that simple. Head over to the Azure Security Center to see the results of your button pressing.
 
-:::image type="content" source="images/Step2-2-Configured-virtual-machines-for-JIT.png" alt-text="Machines configured for Just in Time":::
+![Machines configured for Just in Time](<images/Step2-2-Configured-virtual-machines-for-JIT.png>) 
 
 Adding machines from the security center is straight forward as well. If you are adding multiple machines, it is even easier.
 
 From the Azure Portal, select the Security Center. From the navigation menu, scroll to the Advanced Cloud Defense block and select Just in time VM Access.
 
-:::image type="content" source="images/step2-2-security-center-just-in-time-access.png" alt-text="Just In Time within Security Center":::
+![Just In Time within Security Center](images/step2-2-security-center-just-in-time-access.png) 
 
 The security center displays three tabs - Configured, Not configured, and Unsupported. If the virtual machine configured above still has Just In Time configured, it will be listed on the configured tab. Other VMs will be listed on the Not Configured tab to be setup.
 
 Select the Not Configured tab, there you will see any virtual machines in your azure environment that are able to be configured for Just in Time. To enable the setting, select the check box for the server(s) to configure, then click the Enable JIT on x VMs button to enable it on all of the selected machines.
 
-:::image type="content" source="images/step2-3-not-configured-vms.png" alt-text="Machines waiting to be configured for Just In Time":::
+![Machines waiting to be configured for Just In Time](images/step2-3-not-configured-vms.png) 
 
 With Just In Time enabled for your virtual machine(s) the last configuration step is to determin the ports to use and the time frame for each connection.
 
@@ -116,11 +116,11 @@ The source IP is configured per request, meaning that the IP address the request
 
 The default time range is 3 hours. Because servers in the cloud can be the target of nefarious access attempts, three hours can seem like a very long time. Selecting the elipsis for a specific port will allow you to remove configuration entries for ports your environment does not need.
 
-:::image type="content" source="images/step3-1-just-in-time-access-configuration.png" alt-text="Just In Time access configuration":::
+![Just In Time access configuration](images/step3-1-just-in-time-access-configuration.png) 
 
 Clicking on the row for a port will bring up the port configuration blade. This allows specification of the port number, the protocol (Any, TCP, UDP), the Allowed source IPs - either a list of single IP addresses or a CIDR range, and the max request time. This time defaults to 3 hours. I would suggest changing it to 1 hour for most servers to limit the time per request allowed.
 
-:::image type="content" source="images/step3-2-configuring-a-port-for-just-in-time-access.png" alt-text="Configuring a port for Just In Time Access":::
+![Configuring a port for Just In Time Access](images/step3-2-configuring-a-port-for-just-in-time-access.png) 
 
 Once you have configured all of the ports needed for your environment and removed the items that are not needed, click the save button at the top of the ports list screen to complete the configuration. Now that the hard work is out of the way, using Just in Time is the last piece of this puzzle.
 
@@ -130,13 +130,13 @@ Congratulations! Just In Time is setup for your servers in Azure and ready to ke
 
 To leverage Just In Time Access navigate to the server you want to access in the Azure portal. From there, select Connect in the navigation pane or by choosing the connect button at the top of the overview page. Select RDP from the connect screen for a Windows VM (SSH for Linux) and notice the Request Access button and Source IP options for the connection.
 
-:::image type="content" source="images/step4-1-requesting-access-to-connect.png" alt-text="Requesting access to a server":::
+![Requesting access to a server](images/step4-1-requesting-access-to-connect.png) 
 
 Selecting a Source IP will specify where your access is coming from for this connection. Generally, My IP will be the most appropriate connection (and keep the Security team happiest).  Then click Request Access.  If the account you are logged into Azure with has Write access to the VM, your access request will succeed.
 
 This is needed because the networking configuration of the VM will be updated with a rule allowing your connection for the port(s) that are configured and requested by the user. If your user only has read access, it will not be able to write the networking configuration and the setup will fail.  Please note that this update is asyncronous and will take a little bit to take effect. After your request has been processed, click the button to download the RDP file for connection. The rule added by Just In Time, will allow your connection. You will notice that there might be a deny rule for the ports configured for Just In Time.  This is the case because the feature requires a request to happen which adds an allow rule above the deny rule added for Just in time.
 
-:::image type="content" source="images/step4-2-networking-rules-for-just-in-time.png" alt-text="The Networking rules for Just In Time":::
+![The Networking rules for Just In Time](images/step4-2-networking-rules-for-just-in-time.png) 
 
 ## Conclusion
 
