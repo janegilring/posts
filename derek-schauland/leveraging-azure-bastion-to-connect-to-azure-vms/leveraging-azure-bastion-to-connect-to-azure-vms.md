@@ -23,10 +23,9 @@ Readers should be able to follow your tutorial from the beginning to the end on 
 
 <!-- Our articles have a specific structure. Learn more at https://do.co/style/structure -->
 
-Many enterprise environments, both large and small, have leveraged a bastion or jump host to ensure that the tools needed for troubleshooting or managing systems are available and configured properly. In many of these cases, the bastion host is another VM that needs to be patched, managed, and secured so it can perform these functions without causing additional risk. 
+Many enterprise environments, both large and small, have leveraged a bastion or jump host to ensure that the tools needed for troubleshooting or managing systems are available and configured properly. In many of these cases, the bastion host is another VM that needs to be patched, managed, and secured so it can perform these functions without causing additional risk.
 
-Microsoft has taken some of the capabilities of a jump host and rolled them into the Azure platform. By doing this, there is no longer a need to patch and manage jump hosts within your Azure environment if the tasks you need to perform are just general administration (more on that later). In addition to ensuring there is a method to manage the servers within a VNet, Bastion also allows connection to either public or private IP addresses. Meaning that the systems do not need to be directly Internet facing for this to work. In fact, you can remain connected to a server via Azure Bastion while removing the public IP address of the server. Not that this is recommended, but I may or may not have tried this during testing.
-
+Microsoft has taken some of the capabilities of a jump host and rolled them into the Azure platform. By doing this, there is no longer a need to patch and manage jump hosts within your Azure environment if the tasks you need to perform are just general administration (more on that later). In addition to ensuring there is a method to manage the servers within a VNet, Bastion also allows connection to either public or private IP addresses. Meaning that the systems do not need to be directly Internet facing for this to work. You can remain connected to a server via Azure Bastion while removing the public IP address of the server. Not that this is recommended, but I may or may not have tried this during testing.
 In this guide, you will learn what Azure Bastion is, what it is not, and how it might help you manage your Azure environment more securely.
 
 When you're finished, you'll be able to complete the following tasks:
@@ -44,7 +43,7 @@ To get started with Azure Bastion, you'll need the following:
 - Local or Domain credentials with access to the Azure VM(s)
 - A virtual network within the same region as the servers to which you will connect.
 - (Optional) A preconfigured subnet within your virtual network called AzureBastionSubnet that is at least a /27
-- (Optional) Just-in-time Access configured for the VM you will be using - more info at []().
+- (Optional) Just-in-time Access configured for the VM you will be using - more info at [](). <!-- link to just in time post at cloudskills -->
 
 <!-- Example:
 * One Ubuntu 18.04 server with at least 1GB of RAM set up by following [the Ubuntu 18.04 initial server setup guide](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04), including a sudo non-root user and a firewall.
@@ -56,9 +55,9 @@ To get started with Azure Bastion, you'll need the following:
 
 <!-- For more information on steps, see https://do.co/style/#steps -->
 
-Azure Bastion uses its own predefined subnet to connect to the Virtual Network where it is deployed. This is done to ensure that the service does not run over things that are already on other subnets and helps to keep networking relatively simple. This is called out as an optional step above, but I have found it is easier to configure the networking in advance for Bastion than during the process. There is less changing screens and note taking to ensure you have all the information you might need at hand.
+Azure Bastion uses its predefined subnet to connect to the Virtual Network where it is deployed. This is done to ensure that the service does not run over things that are already on other subnets and helps to keep networking relatively simple. This is called out as an optional step above, but I have found it is easier to configure the networking in advance for Bastion than during the process. There is less changing screens and note-taking to ensure you have all the information you might need at hand.
 
-First, Login to the Azure Portal (https://portal.azure.com) and locate the virtual machine that you want to use with Azure Bastion.
+First, log in to the Azure Portal (https://portal.azure.com) and locate the virtual machine that you want to use with Azure Bastion.
 
 ![One of the VMs to be managed by Bastion](images/Step1-1-find-the-server-to-use-with-bastion.png) <!-- image for VM overview Step1-1 -->
 
@@ -66,13 +65,13 @@ Select the networking option from the settings list on the left, locate the netw
 
 ![Select the Virtual Network used with Bastion](images/Step1-2-locate-the-virtual-network-for-use-with-bastion.png) <!-- image for Vnet and Subnet Step1-2 -->
 
-From the network resource, select Subnets and ensure that there isn't already a subnet called AzureBastionSubnet. Click the Add button to add a subnet and enter the name AzureBastionSubnet (case sensitiveity intact). Usually, Azure will suggest a subnet range that is available for the new subnet. Depending on the configuration of other subnets within this virtual network, some massaging may need to be done. If your subnets are generally all the same size, you should have no problems with this suggestion. 
+From the network resource, select Subnets and ensure that there isn't already a subnet called AzureBastionSubnet. Click the Add button to add a subnet and enter the name AzureBastionSubnet (case sensitivity intact). Usually, Azure will suggest a subnet range that is available for the new subnet. Depending on the configuration of other subnets within this virtual network, some massaging may need to be done. If your subnets are generally all the same size, you should have no problems with this suggestion.
 
-Inspect the address range provided and make sure that the network is at least a /27 in size. This is a requirement for Bastion. /24 will work too, but /28 or /29 will not work for this subnet. 
+Inspect the address range provided and make sure that the network is at least a /27 in size. This is a requirement for Bastion. /24 will work too, but /28 or /29 will not work for this subnet.
 
 ![Create the AzureBastionSubnet for use by Azure Bastion](images/Step1-3-add-the-AzureBastionSubnet-to-the-vnet.png) <!-- image for subnet add step Step1-3 -->
 
-Finally, once all of the subnet settings are configured, click save to create the new AzureBastionSubnet. Remember - each virtual network that you will use with Azure Bastion will need its own dedicated subnet for this service. Once it is configured within the needed VNets, you should be all set to move forward enabling Azure Bastion.
+Finally, once all of the subnet settings are configured, click Save to create the new AzureBastionSubnet. Remember - each virtual network that you will use with Azure Bastion will need its dedicated subnet for this service. Once it is configured within the needed VNets, you should be all set to move forward enabling Azure Bastion.
 
 <!--
 If showing a command, explain the command first by talking about what it does. Then show the command.
@@ -84,13 +83,13 @@ This step has been easier for me to complete beforehand and makes the Bastion se
 
 ## Step 2 - Enabling Azure Bastion 
 
-With the networking out of the way, its time to turn on the feature and create an instance of Azure Bastion for the Vnet. Please remember, Azure Bastion is configured for each virtual network where it will be used. If your organization has seven virtual networks, then to manage all of the systems across them, seven instances of Azure Bastion will be needed.
+With the networking out of the way, its time to turn on the feature and create an instance of Azure Bastion for the VNet. Please remember, Azure Bastion is configured for each virtual network where it will be used. If your organization has seven virtual networks, then to manage all of the systems across them, seven instances of Azure Bastion will be needed.
 
-My recommendation for placement of Azure Bastion is to place it in the same resource group and region as your virtual network. Since the bastion service will need to be in the same region as the virtual network this placement seems to fit pretty well.
+My recommendation for the placement of Azure Bastion is to place it in the same resource group and region as your virtual network. Since the bastion service will need to be in the same region as the virtual network this placement seems to fit pretty well.
 
 To configure Azure Bastion, complete the following steps:
 
-1. Login to the Azure Portal (https://portal.azure.com) 
+1. Log in to the Azure Portal (https://portal.azure.com) 
 2. Locate the Virtual Network that Bastion will be configured to use
 3. On the Overview page, select the resource group for the VNet
 4. Click Add within the Resource Group
@@ -107,7 +106,7 @@ To configure Azure Bastion, complete the following steps:
 9. Select the Region where this resource will be created - must match the VNet that will be used with this instance
 10. Select the Virtual Network to use with Bastion
 
-Note: Because we configured the subnet separately for use with Azure Bastion, the subnet should populate automatically when the VNet is chosen
+<b>Note:</b> Because we configured the subnet separately for use with Azure Bastion, the subnet should populate automatically when the VNet is chosen
 
 11. Create or choose an existing public IP - because this will be used just for Bastion, I typically create a new one and name it accordingly.
 12. Click Next: Tags if your organization uses tags and provide the necessary tagging
@@ -116,18 +115,18 @@ Note: Because we configured the subnet separately for use with Azure Bastion, th
 
 ![Provide the details needed to build the bastion resource](images/step2-3-azure-bastion-configuration-information.png) <!-- The config items of Azure Bastion Step 2-3 --> 
 
-Configuration does not take too long, but is not immediate, you will need to wait maybe 20 minutes for the provisioning to complete.
+Configuration does not take too long but is not immediate, you will need to wait maybe 20 minutes for the provisioning to complete.
 
 With the networking and configuration of Bastion out of the way, you are ready to connect to a server using the bastion service.
 
 ## Step 3 - Connecting to Virtual MAchines with Azure Bastion
 
-Connection does not seem to be something that would need its own section in a guide. Until I started putting this together, I was in agreement. When the local admin password for my Virtual Machine was not in the location I expected, it occurred to me that setting the password before connection might be useful.
+The connection does not seem to be something that would need its section in a guide. Until I started putting this together, I agreed. When the local admin password for my Virtual Machine was not in the location I expected, it occurred to me that setting the password before connection might be useful.
 
-To ensure your virtual machine has a good known password (only if you have forgotten it or the one you swear is right does not work) let's take a moment to reset the password for a VM and then connect to it with Azure Bastion.
+To ensure your virtual machine has a well-known password (only if you have forgotten it or the one you swear is right does not work) let's take a moment to reset the password for a VM and then connect to it with Azure Bastion.
 
 ### Reset the Password for your Server
-1. Login to the Azure Portal (https://portal.azure.com) 
+1. Log in to the Azure Portal (https://portal.azure.com) 
 2. Locate the server for which you wish to reset the password
 2. On the left navigation pane, select Reset Password
 
@@ -150,13 +149,13 @@ Enter the username and password that you specified earlier in this section and c
 
 From here, the process is just like RDP or SSH - the biggest difference is that the display is in a browser. There are sa few caveats at the time of this writing that should be called out, but they are minute and can be worked around.
 
-For Windows VMs, you can copy text in and out of the virtual server using Azure Bastion (if you allow clipboard access within the browser session). Currently, you cannot copy and paste files into the bastion session. This means if you want to install something, you will need to do one of the following:
+For Windows VMs, you can copy text in to and out of the virtual server using Azure Bastion (if you allow clipboard access within the browser session). Currently, you cannot copy and paste files into the bastion session. This means if you want to install something, you will need to do one of the following:
 
 1. Have the files stored on a file share that is accessible from the managed server
 2. Use an Azure Storage account and mount or browse to it from the managed server
 3. Download the installer files from a source on the Internet on the managed server
 
-My favorite here is to put the files in a storage account in Azure, using a fileshare with approximately 10 GB of space available. Then mount the fileshare using the connection information provided. This way, I have a place to put temporary things - the storage can be permanent across multiple VMs and used just for files into and out of the managed server(s).
+My favorite here is to put the files in a storage account in Azure, using a file share with approximately 10 GB of space available. Then mount the file share using the connection information provided. This way, I have a place to put temporary things - the storage can be permanent across multiple VMs and used just for files into and out of the managed server(s).
 
 In addition to file movement in and out of VMs using Bastion, you will need to ensure that your network connection to the Bastion instance over port 443 is pretty good - this in and of itself will not be an issue, however if you find yourself using Just In Time Access or have Network Security Groups in play, you may get a notice from Azure when connecting to VMs that your connection to the resource is unreliable.  Check NSG configurations between the client and VM for any out of the ordinary items.
 
