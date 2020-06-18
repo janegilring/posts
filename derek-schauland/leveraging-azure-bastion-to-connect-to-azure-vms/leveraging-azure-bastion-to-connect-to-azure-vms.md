@@ -43,7 +43,7 @@ To get started with Azure Bastion, you'll need the following:
 - Local or Domain credentials with access to the Azure VM(s)
 - A virtual network within the same region as the servers to which you will connect.
 - (Optional) A preconfigured subnet within your virtual network called AzureBastionSubnet that is at least a /27
-- (Optional) Just-in-time Access configured for the VM you will be using - more info at [](). <!-- link to just in time post at cloudskills -->
+- (Optional) Just-in-time Access configured for the VM you will be using - more info at [Cloudskills.io](https://cloudskills.io/blog/azure-just-in-time). <!-- link to just in time post at cloudskills -->
 
 <!-- Example:
 * One Ubuntu 18.04 server with at least 1GB of RAM set up by following [the Ubuntu 18.04 initial server setup guide](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-18-04), including a sudo non-root user and a firewall.
@@ -157,7 +157,7 @@ For Windows VMs, you can copy text in to and out of the virtual server using Azu
 
 My favorite here is to put the files in a storage account in Azure, using a file share with approximately 10 GB of space available. Then mount the file share using the connection information provided. This way, I have a place to put temporary things - the storage can be permanent across multiple VMs and used just for files into and out of the managed server(s).
 
-In addition to file movement in and out of VMs using Bastion, you will need to ensure that your network connection to the Bastion instance over port 443 is pretty good - this in and of itself will not be an issue, however if you find yourself using Just In Time Access or have Network Security Groups in play, you may get a notice from Azure when connecting to VMs that your connection to the resource is unreliable.  Check NSG configurations between the client and VM for any out of the ordinary items.
+In addition to file movement in and out of VMs using Bastion, you will need to ensure that your network connection to the Bastion instance over port 443 is pretty good - this in and of itself will not be an issue, however if you find yourself using [Just In Time Access](https://cloudskills.io/blog/azure-just-in-time) or have Network Security Groups in play, you may get a notice from Azure when connecting to VMs that your connection to the resource is unreliable.  Check NSG configurations between the client and VM for any out of the ordinary items.
 
 ## Conclusion
 
