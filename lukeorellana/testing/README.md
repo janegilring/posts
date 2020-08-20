@@ -38,11 +38,11 @@ Since we will be writing tests in GO, we will need an environment set up to writ
  
 To create the Codespaces environment, navigate to the [Visual Studio Codespaces](https://online.visualstudio.com/login) login page and sign in with your Azure credentials. Make sure to use Google Chrome as FireFox and Edge are not yet supported. Once logged in, we will be presented with the following page below. Select **Create Codespace**:
 
-![NoCodespace](/Images/NoCodespace.png)
+![NoCodespace](/Images/NoCodespace.PNG)
 
 Next, we need to create a billing plan. The billing plan connects the Visual Studio Codespace environment to our Azure subscription. Select a location that makes sense for you. Also, you can input a plan name according to your Azure naming standards. The plan name is the name of the Azure resource that deploys to your subscription. Next, we need to specify the resource group to host the Visual Studio Codespace resource. When done configuring these settings select **Create**:
 
-![CreateBillingPlan](/Images/CreateBillingPlan.png)
+![CreateBillingPlan](/Images/CreateBillingPlan.PNG)
 
 Now we can set up our Codespace; this is the Visual Studio environment. We could have multiple Codespaces in our plan if we wanted to. Input a **Codespace Name** for the Codespace. Under **Git Repository** paste in the following GitHub repo:
 ```
@@ -50,12 +50,12 @@ https://github.com/allanore/terraform-azure-testing
 ```
 The GitHub repo contains the code for the Terraform module that we will create tests for in this guide. There is also a [post-create.sh](https://github.com/allanore/terraform-azure-testing/blob/master/.devcontainer/post-create.sh) script in this repo that automatically installs the tools we want for our environment, like Go and Terraform. Under **Instance Type**, select the Basic type. Next, select **Create** to build out our VSC environment finally:
 
-![CreateCodespace](/Images/CreateCodespace.png)
+![CreateCodespace](/Images/CreateCodespace.PNG)
 
 We should see our environment starting to build and the post-create.sh script automatically executes and installs our tools and extensions. We are installing GO, Terraform, and a few other tools:
 >**Note:** You may need to refresh your browser at some point to get this screen to show up.
 
-![BuildingCodespace](/Images/BuildingCodespace.png)
+![BuildingCodespace](/Images/BuildingCodespace.PNG)
 
 Once the **Configure Codespace** section shows complete, we are ready to move on to  reviewing the folder structure of this repository:
 
@@ -76,7 +76,7 @@ Now that we've gone over the files in the root folder of this module, let's go o
 - **test** - This is where our test files will live.
 
 It is best practice in Terraform to split up tasks or services into modules. We want to use our modules as building blocks to build infrastructure one piece at a time. From a developer perspective, one might think of modules like functions. Where each module is performing the heavy lifting of a specific task:
-![UsingModules](/Images/UsingModules.png)
+![UsingModules](/Images/UsingModules.PNG)
 
 Having our infrastructure built in smaller units like modules allows us to write tests for them. You can't write a test for a Terraform configuration that is thousands of lines of code. This also provides us with a smaller blast radius when making changes to code. If I make a change to my web app module, I don't put the entire application at risk.
 
