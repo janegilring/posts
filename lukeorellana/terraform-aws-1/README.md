@@ -97,7 +97,7 @@ The provider is also responsible for authenticating to whatever system it intera
 ```
 aws configure
 ```
-![awscli](\images\awscli.png)
+![awscli](images/awscli.png)
 
 The CLI prompts for an [AWS key and secret](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/). This account will be used to create resources in AWS with Terraform.
 
@@ -112,10 +112,10 @@ Now that the configuration file is created, an additional step must be done befo
 ```
 terraform init
 ```
-![init](\images\init.png)
+![init](images/init.png)
 
 This process runs several tasks to prepare Terraform to run properly in that directory. A `.terraform` directory is created, and the providers specified in the configuration file are downloaded:
-![init](\images\tffolder.png)
+![init](images/tffolder.png)
 
 Also note, `terraform init` must be run as the first step in deploying a Terraform configuration file. Otherwise, an error message will be displayed.
 
@@ -131,7 +131,7 @@ To view an execution plan, run the following syntax in the Terraform configurati
 ```
 terraform plan
 ```
-![plan](\images\plan.png)
+![plan](images/plan.png)
 
 An execution plan is generated with the potential outcome of the Terraform configuration code. In this example, since new infrastructure is being created, the plan output shows all new resources will be built. If Terraform already deployed the infrastructure, the plan would show any changes made. Terraform tracks the state of each resource created, which will be explored later in this series.
 
@@ -149,7 +149,7 @@ This will generate an execution plan, just like when running `terraform plan`. H
 
 After inputting `yes`, the S3 bucket infrastructure is deployed. The results are displayed in an output menu at the end:
 
-![tfapply](\images\tfapply.png)
+![tfapply](images/tfapply.png)
 
 Terraform is a declarative language, meaning infrastructure is defined in the Terraform configuration file, and Terraform carries out the tasks to "make it so." The benefit of managing infrastructure in a declarative manner is the abstraction and simplicity gained. This approach is much easier for managing cloud resources than to script the infrastructure with Python or PowerShell code. It also comes with some trade-offs. With the declarative nature, logical complexity is often difficult to pull off. When automating infrastructure with Terraform, keep in mind the declarative approach to avoid any hardships or complexities with developing an automated solution.
 
@@ -175,7 +175,7 @@ resource "aws_s3_bucket" "bucket1" {
 ```
 Now run `terraform apply`. In the execution plan, notice that now the S3 bucket will be destroyed, and a new bucket will be created with the updated name:
 
-![modify](\images\modify.png)
+![modify](images/modify.png)
 
 Terraform keeps track of the infrastructure it manages and creates a state file to track the changes.
 
@@ -194,7 +194,7 @@ terraform destroy
 ```
 Terraform will look at the state file and reference it with the AWS environment. It will then review the configuration file and output a plan on what resources are left to be destroyed. A *yes* is required to confirm the destroy command:
 
-![destroy](\images\destroy.png)
+![destroy](images/destroy.png)
 
 The resources are then destroyed with a summary displayed at the end.
 
