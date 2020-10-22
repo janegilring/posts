@@ -47,9 +47,7 @@ Next, create a Terraform block to specify the providers used in the configuratio
 
 > **Terraform History Lesson:** In previous versions of Terraform, any community made provider had to be downloaded and extracted to a specific local folder by hand. To expand on community provider support and provide a seamless experience, HashiCorp introduced hierarchical namespaces for providers in Terraform v0.13. Providers will automatically be downloaded by specifying their namespace from the [Terraform Registry](https://registry.terraform.io/)].
 
-The `terraform` resource type specifies specific settings for Terraform. In this case, the `required_providers` block is used to specify the AWS provider and the required version.
-
-With the [aggressive release cycle](https://github.com/terraform-providers/terraform-provider-aws/releases) of the AWS provider, it is critical to always pin the provider version. Updates to providers often cause breaking changes to pre-existing Terraform code:
+The `terraform` resource type specifies specific settings for Terraform. In this case, the `required_providers` block is used to specify the AWS provider and the required version. With the [aggressive release cycle](https://github.com/terraform-providers/terraform-provider-aws/releases) of the AWS provider, it is critical to always pin the provider version. Updates to providers often cause breaking changes to pre-existing Terraform code:
 
 ```hcl
 terraform {
@@ -99,9 +97,7 @@ aws configure
 ```
 ![awscli](images/awscli.png)
 
-The CLI prompts for an [AWS key and secret](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/). This account will be used to create resources in AWS with Terraform.
-
-The AWS CLI creates a credentials file automatically in the 
+The CLI prompts for an [AWS key and secret](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/). This account will be used to create resources in AWS with Terraform. The AWS CLI creates a credentials file automatically in the 
 `$HOME/.aws/credentials` on Linux and macOS, or ```"%USERPROFILE%\.aws\credentials"``` on Windows. The AWS provider will automatically look at this location for credentials.
 
 In this step you created a Terraform configuration for deploying an S3 bucket into AWS. Now you are ready to initialize the Terraform directory.
@@ -115,13 +111,14 @@ terraform init
 ![init](images/init.png)
 
 This process runs several tasks to prepare Terraform to run properly in that directory. A `.terraform` directory is created, and the providers specified in the configuration file are downloaded:
+
 ![init](images/tffolder.png)
 
 Also note, `terraform init` must be run as the first step in deploying a Terraform configuration file. Otherwise, an error message will be displayed.
 
 > **Terraform History Lesson:** Back in the day, all Terraform providers used to be included within the Terraform binary. This made updates to Terraform slower and riskier because the providers were tightly coupled with Terraform itself. Any update to the providers or Terraform would potentially break other features. HashiCorp decided to separate providers from the Terraform binary, which is why the provider must be download over the internet like a software package. 
 
-The provider has been downloaded and the directory has been initialized. The next step is to create an execution plan to verify the Terraform code's potential outcome.
+The provider has been downloaded and the Terraform configuration directory has been initialized. The next step is to create an execution plan to verify the Terraform code's potential outcome.
 
 # Step 3 - Plan
 
@@ -147,7 +144,7 @@ terraform apply
 ```
 This will generate an execution plan, just like when running `terraform plan`. However, at the end, there will be a prompt for `yes` or `no` to deploy the configuration.
 
-After inputting `yes`, the S3 bucket infrastructure is deployed. The results are displayed in an output menu at the end:
+After inputting *yes*, the S3 bucket infrastructure is deployed. The results are displayed in an output menu at the end:
 
 ![tfapply](images/tfapply.png)
 
@@ -200,6 +197,6 @@ The resources are then destroyed with a summary displayed at the end.
 
 # Conclusion
 
-In this article, you learned how to create Terraform configuration files using HashiCorp Configuration Language. The HCL language of Terraform not only serves as infrastructure automation code but also as living documentation. The syntax is easy enough to read where teams can look at a directory and determine the type of infrastructure that is provisioned. You also reviewed the concepts of the init, plan, apply, and destroy commands that are most commonly used for deploying Terraform configuration files. Terraform is a powerful infrastructure automation tool and provides the efficiency and stability that companies require in today's world.  
+In this guide, you learned how to create Terraform configuration files using HashiCorp Configuration Language. The HCL language of Terraform not only serves as infrastructure automation code but also as living documentation. The syntax is easy enough to read where teams can look at a directory and determine the type of infrastructure that is provisioned. You also reviewed the concepts of the init, plan, apply, and destroy commands that are most commonly used for deploying Terraform configuration files. Terraform is a powerful infrastructure automation tool and provides the efficiency and stability that companies require in today's world.  
 
 
