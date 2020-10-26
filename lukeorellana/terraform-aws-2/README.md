@@ -3,15 +3,15 @@
 Terraform state is a critical component of Terraform and is crucial to understand when building automated solutions. Lack of understanding of how to manage state can result in automation heartaches or even infrastructure outages. 
 
 The best way to understand how Terraform state works is to know why it is needed in the first place. Terraform is a declarative language, meaning you specify what needs to be created in the Terraform configuration file, and Terraform will deploy it in AWS in the correct order:
-![tfbuild](/images/tfbuild.png)
+![tfbuild](images/tfbuild.png)
 
 This declarative nature makes Terraform very scalable when managing cloud resources. It would be hard to use Bash or Python to script out the hundreds of resources in AWS and manage them all:
-![aws-resources](/images/aws-resources.png)
+![aws-resources](images/aws-resources.png)
 
 But you might ask. Can't Terraform query the cloud provider to see what resources are there and then create the missing ones instead of using a state file? This strategy was looked at originally in the very early days of Terraform. However, certain scenarios like the following would cause issues.
 
 When removing resources from a Terraform configuration file, Terraform still needs to know the dependencies to destroy the removed resources. Remember, it's declarative, so if you were to remove a network and server that was originally deployed with Terraform, you would simply omit it from the configuration, and Terraform would destroy those resources on the next `terraform apply`:
-![tfdestroy](/images/tfdestroy.png)
+![tfdestroy](images/tfdestroy.png)
 
 
 The `terraform.tfstate` file provides Terraform the information it needs to determine that the 2nd VPC exists and no longer needs to be there.  It also contains the dependencies of each resource to determine the order on what to destroy first. 
@@ -113,14 +113,14 @@ terraform init
 terraform apply
 ```
 Input *yes* to start deploying the resources:
-![tfapply](/images/tfapply.png)
+![tfapply](images/tfapply.png)
 
 Because resources have been successfully created with Terraform, the `terraform.tfstate` file was created in the directory and is populated with the resource metadata:
-![tfstate](/images/tfstate.png)
+![tfstate](images/tfstate.png)
 
 Open up the state file either in another tab in VSCode or with a text editor. You can see each resource specified in the `main.tf` file is mapped by its resource block label to its ARN in the AWS environment. Terraform state acts as the database between the Terraform configuration file and the AWS environment:
 
-![inspecstate](/images/inspecstate.png)
+![inspecstate](images/inspecstate.png)
 
 > **Terraform History Lesson:** Very early prototypes of Terraform actually didn't even use state files and instead used the AWS Tags to map resources. However, this became an issue with AWS resources that didn't support tags and was not scalable to other Cloud Service providers or systems.
 
@@ -148,7 +148,7 @@ resource "aws_instance" "server2" {
 
 Save the `main.tf` file and run `terraform plan` in the terminal to see the potential outcome of this change:
 
-![tfplan-bl](/images/tfplan-bl.png)
+![tfplan-bl](images/tfplan-bl.png)
 
 The execution plan shows that Terraform will recreate the web2 EC2 instance. Since the resource block label has been changed from `web2` to `server2`, Terraform cannot match up the existing AWS resource in `terraform.tfstate` and will try to remove the old and add a new one. This is why it's important never to change the resource block labels after the infrastructure has been deployed. Be sure to plan the label naming scheme properly ahead of time.
 
@@ -166,7 +166,7 @@ resource "aws_instance" "web2" {
 ```
 Save the `main.tf` file and run `terraform plan` in the terminal to see the potential outcome of this change:
 
-![update](/images/update.png)
+![update](images/update.png)
 
 The execution plan shows that the web2 instance will be updated to a `t2.micro` size if Terraform were to apply the configuration. Reading the execution plan and being able to decipher the outcome is critical when managing infrastructure with Terraform. You may also output the execution plan to a file by typing the following command in the terminal:
 ```
@@ -222,16 +222,16 @@ resource "aws_instance" "web1" {
 ```
 Save the `main.tf` file and run a `terraform apply`:
 
-![destroy](/images/destroy.png)
+![destroy](images/destroy.png)
 
 Because VPC2 and it's Subnet, and EC2 Instance were removed from the configuration. Terraform will look at the `terraform.tfstate` file and determine what resources are no longer specified in `main.tf`. It will then try to remove those resources, which is demonstrated by the execution plan.
 
 In the terminal, input *yes* and watch the resources get destroyed:
-![destroyvpc](/images/destroyvpc.png)
+![destroyvpc](images/destroyvpc.png)
 
 
 But, how does Terraform know the order to destroy the VPC2 resources? We removed them from `main.tf`, so how did it know? The `terraform.tfstate` file also contains the dependencies of each resource, so it knows how each resource is destroyed and what order to do it in:
-![dependencies](/images/dependencies.png)
+![dependencies](images/dependencies.png)
 
 This is where the state file comes in, and simply querying the AWS resources and making changes based on that will not work.
 
@@ -243,7 +243,7 @@ Now that you have a better understanding on how the state file functions. In the
 
 Modify the `terraform.tfstate` file and change the web1 instance type to `t2.micro`. Make sure to save the file afterward:
 
-![modstate](/images/modstate.png)
+![modstate](images/modstate.png)
 
 > **Warning**: Don't directly edit the state file in production! This is just for learning purposes; results could end up corrupting the file.
 
@@ -256,11 +256,11 @@ Check the `terraform.tfstate` file again. Notice the `instance_type` changed bac
 
 What happens if the EC2 instance is modified in AWS instead? Log in to the [AWS console](https://console.aws.amazon.com/). Navigate to the EC2 dashboard and stop the **web1** EC2 instance. Right-click on the EC2 instance and select **Stop instance**. After the instance has stopped, right-click on the EC2 instance and select **Instance settings** > **Change instance type**:
 
-![ec2console](/images/ec2console.png)
+![ec2console](images/ec2console.png)
 
 Select the *t2.micro* instance type and click **Apply**:
 
-![consoleresize](/images/consoleresize.png)
+![consoleresize](images/consoleresize.png)
 
 Right-click on the EC2 instance again and select **Start instance**. Navigate back to the terminal in the Terraform directory and input another `terraform refresh` in the terminal:
 ```
@@ -269,7 +269,7 @@ terraform refresh
 
 The `terraform.tfstate` state file updates to reflect the change that was made in the AWS console. However, now run `terraform plan`:
 
-![tfplan-refresh](/images/tfplan-refresh.png)
+![tfplan-refresh](images/tfplan-refresh.png)
 
 
 > **Notice:** In the screenshot above, you can see when running `terraform plan` or `terraform apply`, a `terraform refresh` is automatically initiated first. This provides the state file with the most accurate information in the AWS environment before performing a plan or apply.
