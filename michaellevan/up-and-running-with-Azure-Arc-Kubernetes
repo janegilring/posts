@@ -1,3 +1,5 @@
+# Up and Running with Azure Arc: Kubernetes
+
 In a constant state of flux, especially in the cloud, individuals and organizations are looking for more and more ways to easily manage Kubernetes clusters. Because Kubernetes is a large product in itself with a steep learning curve and always changing, the management of the clusters themselves becomes daunting. 
 
 With Azure Arc, there's no need to worry about opening up multiple different windows to see all of the Kubernetes clusters or figuring out how to manage them all at once. Instead, there's a single location in the Azure portal that allows you to manage them in one location.
