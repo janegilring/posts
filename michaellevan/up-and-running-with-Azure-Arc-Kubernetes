@@ -1,0 +1,127 @@
+# Up and Running with Azure Arc: Kubernetes
+
+In a constant state of flux, especially in the cloud, individuals and organizations are looking for more and more ways to easily manage Kubernetes clusters. Because Kubernetes is a large product in itself with a steep learning curve and always changing, the management of the clusters themselves becomes daunting. 
+
+With Azure Arc, there's no need to worry about opening up multiple different windows to see all of the Kubernetes clusters or figuring out how to manage them all at once. Instead, there's a single location in the Azure portal that allows you to manage them in one location.
+
+In this blog post, you're going to learn about what Azure Arc is and how to use it with Azure Kubernetes Services.
+
+## Prerequisites
+
+To follow along with this blog post, you'll need the following:
+
+- An Azure account
+- An Azure Kubernetes Services (AKS) cluster
+- Azure CLI installed and configured. If you don't have Azure CLI installed, you can download it [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+- Helm installed. If you don't have Helm already installed, you can find it [here](https://helm.sh/docs/intro/install/).
+
+    **TIP** If you're not familiar with Helm, it's a package manager for Kubernetes manifests. It allows you to share, collaborate, and package up Kubernetes manifests like you would an application.
+
+## What's Azure Arc?
+
+Environments grow daily. Whether it's a small startup or a large fortune 500 organization, new services and infrastructure are constantly being added. Whether it's development environments, testing environments, or full blown production environments, components are always being added and very rarely are they being scaled back.
+
+In short, it becomes a management nightmare for any engineer, developer or infrastructure, deploying applications.
+
+With Azure Arc, that nightmare becomes a little bit less-so.
+
+Azure Arc allows you to centrally manage all types of environments, not just cloud. For example, let's say you have workloads running in ESXi, Hyper-V, or even stand-alone bare metal servers running an operating system. You can manage all of that from Azure Arc.
+
+Another key scenario is multi-cloud. If you're running in AWS, for example, you can manage servers running in AWS inside of Azure Arc.
+
+When it comes to a server running anywhere, a Kubernetes cluster running anywhere, or Azure data services, the possibilities become endless. 
+
+Outside of a management perspective, you also have monitoring and deployment capabilities. For example, you can use the power of GitOps to deploy an application from GitHub to a Kubernetes cluster, all inside of Azure Arc.
+
+## Creating an AKS Cluster to Manage with Azure Arc
+
+To manage an AKS cluster with Azure Arc, you need to ensure that an active AKS cluster exists. In this section, you're going to learn how to create an AKS cluster using Azure CLI.
+
+### Creating the Cluster
+
+The code to create the cluster will configure a few options:
+
+- The cluster name
+- The node count
+- Enable monitoring
+- Generate SSH keys for worker node connection
+- Zones (where the AKS cluster will exist)
+- Kubernetes API version
+
+Run the code below in a PowerShell terminal or a code editor, like VS Code, to create the AKS cluster.
+
+```powershell
+az aks create --resource-group your_resource_group_name `
+              --name cloudskillsaks92 `
+              --node-count 2 `
+              --enable-addons monitoring `
+              --generate-ssh-keys `
+              --zones {1, 2, 3} `
+              --kubernetes-version 1.19.3
+```
+
+    **TIP** Creating the AKS cluster will take several minutes, even up to 15. This is due to multiple VMs being created, scaled out across zones, and the other features that are being enabled.
+
+Once the AKS cluster is done being created, it should look similar to the screenshot below.
+
+## Adding Azure Arc to Kubernetes
+
+Now that you have a Kubernetes cluster in Azure created, it's time to add the Kubernetes cluster to Azure Arc. By Default, Kubernetes won't exist in Arc. However, there's a very straight-forward way to add it using the Azure Arc portal.
+
+Log into the Azure portal and go to the [Azure Arc blade](https://portal.azure.com/#blade/Microsoft_Azure_HybridCompute/AzureArcCenterBlade/overview).
+
+Click on the blue **Add** button under **Add your existing infrastructure**
+
+![](images/1.png)
+
+Under the **Existing infrastructure** options, choose **Kubernetes clusters (preview)**
+
+![](images/2.png)
+
+Click the next option for cluster details.
+
+![](images/3.png)
+
+Under the options for configuring the Kubernetes cluster, add in the following components:
+
+- Subscription where the AKS cluster exists
+- The resource group where the AKS cluster exists
+- AKS cluster name
+- Region where the cluster exists
+
+After adding in the options, click the **Next: Tags** button. Don't add in any tags.
+
+Click the **Next: Run script** button. The script is used to connect Azure Arc to AKS via Azure CLI. Run the code as you see on your screen in a terminal. An example is in the screenshot below.
+
+![](images/4.png)
+
+**TIP** If you get an error, you may have to run the `az aks get-credentials` command to authenticate to the AKS cluster and store the AKS credentials in your local Kubernetes configuration.
+
+```powershell
+az aks get-credentials -n your_aks_cluster_name -g your_resource_group_name
+```
+
+You should now see the AKS cluster in the Azure Arc portal.
+
+![](images/5.png)
+
+## Managing Kubernetes from Azure Arc
+
+AKS is created, Arc is managing Kubernetes, and it's officially time to see what you can do within Azure Arc to make life easier when managing one, two, or twenty different AKS clusters.
+
+Click on the AKS cluster and you'll see a portal open for that specific cluster. You'll see options like:
+
+- GitOps
+- Azure Policies
+- Configurations
+- Monitoring with App Insights
+- Alerts
+- Many others...
+
+![](images/6.png)
+
+From here, you can manage any portion of the Kubernetes cluster that's available to you. Keep in mind that the Kubernetes Azure Arc feature is in preview, but it's still very advanced and capable of managing an AKS cluster.
+
+## Closing Thoughts
+
+In tech, things are moving faster than ever. It's almost impossible to keep up with, especially with how fast deployments can be done today. Because of that, you need a single place that you can manage all of your resources, cloud and on-prem. With Azure Arc, you have the ability to not only manage resources in one location, but do it effectively.
