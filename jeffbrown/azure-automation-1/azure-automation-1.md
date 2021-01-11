@@ -52,7 +52,37 @@ Here in the Automation Accounts resource page, you can view and manage any exist
 
 ![Creating the Automation Account](./images/add-automation-account-wizard.png)
 
-Once the account information has been entered, click on **Create**. Once the account has been created successfully, select the account in the list (this may require a refresh before it appears).
+Once the account information has been entered, click on **Create**. Once the account has been created successfully, select the account in the Automation Account list (this may require a refresh before it appears).
+
+## Create the PowerShell Runbook
+
+Now that they Automation Account has been created, you can create the runbook that hosts your PowerShell code. In the Automation Account resource using the left menu, scroll down to **Process Automation** and select **Runbooks**. Here you will see some example of each type of runbook you can create: Graphical, Python, and PowerShell. You can view each of these runbooks to learn how to perform different actions in runbooks, such as using variable or connecting to Azure resources. You can also import a runbook or browse the PowerShell Gallery and Azure Automation GitHub organization for resources created by Microsoft and the community.
+
+![Viewing automation runbooks](./images/view-runbooks.png)
+
+Let's get started creating a runbook by select **+ Create a runbook**. In the form, enter a runbook name, select the runbook type, and enter a description. This demo will be using a PowerShell runbook type. Once the information has been entered, select the **Create** button.
+
+![Creating a runbook](./images/create-runbook-config.png)
+
+When the runbook is created, the Azure portal should redirect you to the **Edit PowerShell Runbook** page. This page is where you can enter in the PowerShell code that the Automation Account executes. The menu actions include the ability to save the runbook, publish a new version of the runbook, revert to a previously published version, or run a test of the runbook. On the left, you can view the modules and cmdlets available to use in the runbook, import references to other runbooks, or view assets that you can use in the script, such as variables or certificates for authentication.
+
+![Edit PowerShell runbook](./images/edit-powershell-runbook.png)
+
+For this runbook, I am keeping the code simple and displaying the phrase "Hello, Azure Runbooks!" to the console.
+
+```powershell
+"Hello, Azure Runbooks!"
+```
+
+Once you have entered the code, select the **Save** button, then the **Publish** button. You will receive a warning that publishing the runbook will override the existing published version. Select **Yes** to this prompt. Once the runbook is successfully published, the Azure portal will redirect to the **Overview** page.
+
+## Execute the Runbook
+
+With the runbook created and published, you can now execute the runbook and view the output. From the **Overview** page, select the **Start** icon. It will prompt you to make sure you want to start the runbook, go ahead and select **Yes**. Once the runbook has been execute, the portal will redirect to the overview page for this runbook job instance. Here you can view the instance ID, the status, and the input and output streams of the runbook. From here, select the **Output** tab to view the "Hello, Azure Runbooks!" message to the console.
+
+![Execute the runbook](./images/execute-runbook.png)
+
+
 
 <!-- For more information on steps, see https://do.co/style/#steps -->
 
