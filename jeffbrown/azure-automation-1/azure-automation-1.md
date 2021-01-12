@@ -78,10 +78,57 @@ Once you have entered the code, select the **Save** button, then the **Publish**
 
 ## Execute the Runbook
 
-With the runbook created and published, you can now execute the runbook and view the output. From the **Overview** page, select the **Start** icon. It will prompt you to make sure you want to start the runbook, go ahead and select **Yes**. Once the runbook has been execute, the portal will redirect to the overview page for this runbook job instance. Here you can view the instance ID, the status, and the input and output streams of the runbook. From here, select the **Output** tab to view the "Hello, Azure Runbooks!" message to the console.
+With the runbook created and published, you can now execute the runbook and view the output. From the **Overview** page, select the **Start** icon. It will prompt you to make sure you want to start the runbook, go ahead and select **Yes**. Once the runbook has been executed, the portal will redirect to the overview page for this runbook job instance. Here you can view the instance ID, the status, and the input and output streams of the runbook. From here, select the **Output** tab to view the "Hello, Azure Runbooks!" message to the console.
 
 ![Execute the runbook](./images/execute-runbook.png)
 
+## Add Warning and Error Output
+
+In the above example, the PowerShell runbook output the string "Hello, Azure Runbooks!". You can also use the cmdlets *Write-Warning* and *Write-Error* to output warning and error messages to the console logs.
+
+Back on the runbook **Overview** page, select the Edit icon at the top to go back to the **Edit PowerShell Runbook* page with the existing code. In the code editor, add the following lines of code:
+
+```powershell
+Write-Warning -Message "This is the warning message."
+
+Write-Error -Message "This is the error message."
+```
+
+![Adding warning and error output](./images/add-warning-error-output.png)
+
+Save and publish this version of the runbook. Back in the **Overview** page for the runbook, select the **Start** icon to execute the runbook again, just as you did previously. In the job results window, select the **Errors** and **Warnings** tabs to view the custom messages outputted from the script. You can also select **All Logs** to view all output from the script in one place.
+
+![Error output](./images/error-output.png)
+
+![Warning output](./images/warning-output.png)
+
+By using the appropriate PowerShell cmdlets, you can create a runbook that shows regular, warning, and errors messages. Customzing this output can quickly show if the script is having any issues by properly displaying warnings and errors.
+
+## Adding Parameters
+
+PowerShell parameters enable passing information to a script to use during execution. Parameters enable PowerShell scripts to be more dynamic instead of setting static variables. Runbooks inside of Azure Automation can also use parameters when they are defined in the script. Let's examine this functionality now.
+
+Follow the instructions from earlier in this post to edit the runbook code. In the code editor, add a parameter that will accept a name to display in the greeting message. If a parameter value is not given, the name will default to "CloudSkills". Here is the new runbook code.
+
+```powershell
+param (
+    [Parameter()]
+    [string]
+    $Name = "CloudSkills"
+)
+
+"Hello, $Name"
+```
+
+After savining and publishing the runbook, execute the runbook just as you have done previously. However, this time Azure will display a **Start Runbook** page to allow you to input a value for the *Name* parameter. It also indicates that "CloudSkills" will be used as the default. Enter your name and select **OK**.
+
+![Runbook with parameters](./images/parameter.png)
+
+In the job results window, the **Input** tab will show the value of the *Name* parameter passed to the runbook, and the **Output** tab will show the output message using the value of the parameter.
+
+## Using Variables
+
+While you can define variables within the runbook code, you can also define variables within the Automation Account to be used by multiple runbooks.
 
 
 <!-- For more information on steps, see https://do.co/style/#steps -->
