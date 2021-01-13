@@ -1,27 +1,5 @@
 # Azure Automation: Creating a PowerShell Runbook
 
-<!-- Use Title Case for all Titles -->
-
-<!-- Learn about the title, introduction, and Goals sections at https://do.co/style#title-introduction-and-goals -->
-
-<!-- Learn about formatting headers at https://do.co/style#headers -->
-
-<!-- Our articles have a specific structure. Procedural tutorials follow this structure:
-
-* Title
-* Introduction (Level 3 heading)
-* Prerequisites (Level 2 heading)
-* Step 1 — Doing Something (Level 2 heading)
-* Step 2 — Doing Something (Level 2 heading)
-...
-* Step 5 — Doing Something (Level 2 heading)
-* Conclusion (Level 2 heading)
-
-
-Learn more at https://do.co/style/structure -->
-
-### Introduction
-
 Azure Automation is a cloud-based automation and configuration service that can be
 
 In this guide, you will set up your an Azure Automation Account and deploy your first PowerShell runbook. When you're finished, you will have the necessary skills to get started deploying runbooks in your Azure tenant.
@@ -54,7 +32,7 @@ Here in the Automation Accounts resource page, you can view and manage any exist
 
 Once the account information has been entered, click on **Create**. Once the account has been created successfully, select the account in the Automation Account list (this may require a refresh before it appears).
 
-## Create the PowerShell Runbook
+## Create a PowerShell Runbook
 
 Now that they Automation Account has been created, you can create the runbook that hosts your PowerShell code. In the Automation Account resource using the left menu, scroll down to **Process Automation** and select **Runbooks**. Here you will see some example of each type of runbook you can create: Graphical, Python, and PowerShell. You can view each of these runbooks to learn how to perform different actions in runbooks, such as using variable or connecting to Azure resources. You can also import a runbook or browse the PowerShell Gallery and Azure Automation GitHub organization for resources created by Microsoft and the community.
 
@@ -104,7 +82,7 @@ Save and publish this version of the runbook. Back in the **Overview** page for 
 
 By using the appropriate PowerShell cmdlets, you can create a runbook that shows regular, warning, and errors messages. Customzing this output can quickly show if the script is having any issues by properly displaying warnings and errors.
 
-## Adding Parameters
+## Enhance Runbook Execution with Parameters
 
 PowerShell parameters enable passing information to a script to use during execution. Parameters enable PowerShell scripts to be more dynamic instead of setting static variables. Runbooks inside of Azure Automation can also use parameters when they are defined in the script. Let's examine this functionality now.
 
@@ -126,175 +104,28 @@ After savining and publishing the runbook, execute the runbook just as you have 
 
 In the job results window, the **Input** tab will show the value of the *Name* parameter passed to the runbook, and the **Output** tab will show the output message using the value of the parameter.
 
-## Using Variables
+## Creating a Variable Asset
 
-While you can define variables within the runbook code, you can also define variables within the Automation Account to be used by multiple runbooks.
+While you can define variables within the runbook code, you can also define variables within the Automation Account to be used by multiple runbooks. Back in the Automation Account, navigate to **Shared Resources** > **Variables**. From here, select **Add a variable**. In the **New Variable** window, enter a variable name, description, data type, value, and whether it should be encrypted. Once completed, select **Create**.
 
+![Create variable](./images/add-variable.png)
 
-<!-- For more information on steps, see https://do.co/style/#steps -->
+With the variable create, you can now reference it in a runbook. Navigate back to the runbook and edit the code. Inside the script, you can retrieve the value of the variable by using the **Get-AutomationVariable** with the variable name and storing it into a script-level variable.
 
-Introduction to the step. What are we going to do and why are we doing it?
-
-First....
-
-Next...
-
-Finally...
-
-<!-- When showing a command, explain the command first by talking about what it does. Then show the command. Then show its output in a separate output block: -->
-
-Display the status of your firewall with the following command:
-
-```command
-sudo ufw status
+```powershell
+$congratsMessage = Get-AutomationVariable -Name 'congratsMessage'
 ```
 
-You'll see the following output:
+You can now use the defined variable as needed in the script. If you don't remember the name of the variable you defined for the Automation Account, you can view the variables unders **Assets** and use the context menu to auto-generate the PowerShell command.
 
-```
-[secondary_label Output]
-Status: active
+![Using variables in script](./images/using-variables.png)
 
-To                         Action      From
---                         ------      ----
-OpenSSH                    ALLOW       Anywhere                  
-<^>Nginx HTTP                 ALLOW       Anywhere<^>
-OpenSSH (v6)               ALLOW       Anywhere (v6)             
-<^>Nginx HTTP (v6)            ALLOW       Anywhere (v6)<^>
-```
+Save, publish, and then execute the runbook to verify the variable output in the job results window.
 
-<!-- You can use highlighting in output to point out relevant details -->
-
-
-<!-- When asking the reader to open a file, specify the file and show the command to open it: -->
-
-Open the file `/etc/nginx.conf` in your editor:
-
-```command
-sudo nano /etc/nginx.com
-```
-
-<!-- When showing a configuration file, try to show only the relevant parts and explain what needs to change.  -->
-
-Change the `root` field so it points to `/var/www/your_domain`:
-
-```nginx
-[label /etc/nginx/sites-available/default]
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
-
-    root <^>/var/www/your_domain<^>;
-    index index.html index.htm;
-
-    server_name localhost;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-```
-
-<!-- See do.co/style#commands-and-code-in-steps for more on how to incorporate command and code in your steps. -->
-
-Now transition to the next step by telling the reader what's next.
-
-## Step 2 — Title Case
-
-Another introduction
-
-Your content
-
-Transition to the next step.
-
-## Step 3 — Title Case
-
-Another introduction
-
-Your content
-
-Transition to the next step.
+![Verifying variable output](./images/variable-output.png)
 
 ## Conclusion
 
-In this article you [configured/set up/built/deployed] [something]. Now you can....
+In this post, you learned how to create an Azure Automation Account to host your first PowerShell runbook. You saw how to view the runbook output and use *Write-Warning* and *Write-Error* to customize output. Finally, you extended the functionality of you runbook with parameters and variable assets.
 
-<!-- Speak  to reader benefits of this technique or procedure and optionally provide places for further exploration. -->
-
-
-<!------------ Formatting ------------------------->
-
-<!-- Some examples of how to mark up various things
-
-This is _italics_ and this is **bold**.
-
-Only use italics and bold for specific things. Learn more at https://do.co/style#bold-and-italics
-
-This is `inline code`. Use it for referencing package names and commands.
-
-Here's a command someone types in the Terminal:
-
-```command
-sudo nano /etc/nginx/sites-available/default
-```
-
-Here's a configuration file. 
-
-The label on the first line lets you clearly state the file that's being shown or modified:
-
-```nginx
-[label /etc/nginx/sites-available/default]
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
-
-    root <^>/usr/share/nginx/html<^>;
-    index index.html index.htm;
-
-    server_name localhost;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-```
-
-Here's output from a command:
-
-```
-[secondary_label Output]
-Could not connect to Redis at 127.0.0.1:6379: Connection refused
-```
-
-Learn about formatting commands and terminal output at https://do.co/style#code
-
-Key presses should be written in ALLCAPS with in-line code formatting: `ENTER`.
-
-Use a plus symbol (+) if keys need to be pressed simultaneously: `CTRL+C`.
-
-This is a <^>variable<^>.
-
-This is an `<^>in-line code variable<^>`
-
-Learn more about how to use variables to highlight important items at https://do.co/style#variables
-
-Use `<^>your_server_ip<^>` when referencing the IP of the server.  Use `111.111.111.111` and `222.222.222.222` if you need other IP addresses in examples.
-
-Learn more about host names and domains at https://do.co/style#users-hostnames-and-domains
-
-<$>[note]
-**Note:** This is a note.
-<$>
-
-<$>[warning]
-**Warning:** This is a warning.
-<$>
-
-Learn more about notes at https://do.co/style#notes-and-warnings
-
-Screenshots should be in PNG format and hosted on imgur. Embed them in the article using the following format:
-
-![Alt text for screen readers](/path/to/img.png)
-
-Learn more about images at https://do.co/style#images-and-other-assets
--->
+Check back soon for my next post on Azure Automation where I will show how to configure authentication in order to access and manage Azure resources.
