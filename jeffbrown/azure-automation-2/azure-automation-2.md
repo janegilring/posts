@@ -1,8 +1,8 @@
 # Azure Automation: Managing Runbook Authentication and Modules
 
-In my previous post, we took a look at [creating your first Azure Automation PowerShell runbook](https://cloudskills.io/blog/azure-automation-runbook). We set up the Azure Automation account, authored a PowerShell runbook, and incorporated parameters and variable assets. The next step is to understand how we can access and manage other Azure resources from our runbooks.
+In my previous post, we took a look at [creating your first Azure Automation PowerShell runbook](https://cloudskills.io/blog/azure-automation-runbook). We set up the Azure Automation account, authored a PowerShell runbook, and incorporated parameters and variable assets. The next step is to understand how we can access and manage Azure resources from our runbooks.
 
-In this guide, you will learn about how Azure Automation can authenticate and access Azure resources. We will also take a look at importing more modules to add cmdlets to our runbooks. When you're finished, you'll have the skills to elevate your runbooks to the next level.
+In this guide, you will learn how Azure Automation can authenticate and access Azure resources. We will also take a look at importing PowerShell modules to add cmdlets to our runbooks. When you're finished, you'll have the skills to elevate your runbooks to the next level.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ Before you begin this guide, you'll need the following:
 
 ## Azure Automation Run As Account
 
-When I created the Azure Automation account in the first article, I enabled the option [to create an Azure Run As account](https://cloudskills.io/blog/azure-automation-runbook#create-an-azure-automation-account). By enabling this option, Azure will automatically create an Azure AD application. You can use this application identity to authenticate to an Azure subscription to access and manage resources. Azure performs several other functions such as:
+When I created the Azure Automation account in the first article, I enabled the option [to create an Azure Run As account](https://cloudskills.io/blog/azure-automation-runbook#create-an-azure-automation-account). By enabling this option, Azure will automatically create an Azure AD application. You can use this application identity to authenticate to an Azure subscription to access and manage resources. During the Run As account creation, Azure performs several other functions such as:
 
 - Adding a self-signed certificate to the application account.
 - Creating a service principal identity for the application.
@@ -31,7 +31,7 @@ You can view the account's properties in the portal, including the certificate t
 
 At the top of the properties page, note an action named **Renew Certificate**. The account's certificate is only valid for one year, so be sure to renew before expiration to keep your runbooks from failing.
 
-Along with the Run As account, Azure will create two connection assets: **AzureRunAsCertificate** and **AzureRunAsConnection**. The certificate asset authenticates to Azure so the runbook can manage Azure Resource Manager resources. As noted above, the certificate has a one-year lifespan. The connection asset contains the application ID, tenant ID, subscription ID, and certificate thumbprint. Basically, everything you need to connect to Azure to start managing resources! In an upcoming example, I'll use this connection to connect to Azure and to retrieve some resources.
+Along with the Run As account, Azure will create two connection assets: **AzureRunAsCertificate** and **AzureRunAsConnection**. The certificate asset authenticates to Azure so the runbook can manage Azure Resource Manager resources. The connection asset contains the application ID, tenant ID, subscription ID, and certificate thumbprint. Basically, everything you need to connect to Azure to start managing resources! In an upcoming example, I'll use this connection to connect to Azure and to retrieve some resources.
 
 ## Automation Account Modules
 
@@ -43,15 +43,13 @@ Luckily, I'm not stuck using the older modules in my PowerShell runbooks. I can 
 
 From the module page, I can search the module for the cmdlets and functions to verify it has what I need. From here, I can select the **Import** action at the top. Once the import is successful, I need to navigate the **Modules gallery** and perform the same steps for the *Az.Resources* module so I can use the *Get-AzResourceGroup* in my runbook.
 
-The imports can take a few minutes, but you can verify the status by navigating back to **Shared Resources > Modules**. In this list of modules, verify the module import progress in the **Status** column.
-
-From this **Modules** page, also note there are options to import a custom module. Select the **+ Add a module** and select a .zip file that contains the module code. Note that the module code's file name must match the file name of the zip file. Importing custom written module is a fantastic feature of Azure Automation that allows you to write a runbook to fit any scenario.
+The imports can take a few minutes, but you can verify the status by navigating back to **Shared Resources > Modules**. In this list of modules, verify the module import progress in the **Status** column. From this **Modules** page, also note there are options to import a custom module. Select the **+ Add a module** and choose a .zip file that contains the module code. Note that the module code's file name must match the file name of the zip file. Importing custom written module is a fantastic feature of Azure Automation that allows you to write a runbook to fit any scenario.
 
 ## Connect to Azure from PowerShell Runbook
 
 Back in the Automation Account, I will create a new runbook that will connect to Azure and retrieve my resource groups. In the Automation Account, navigate to **Process Automation > Runbooks**, then select **+ Create a runbook**. From here, input a name for the runbook, select the PowerShell runbook type, then select **Create**.
 
-In the **Edit PowerShell Runbook** window, I need to write code that will retrieve the information stored in **AzureRunAsConnection**. For this, I can use the command *Get-AutomationConnection* and specify the name of the Run As connection. If I store the connection information to a variable, I can reference the tenant ID, application ID, and certificate thumbprint in the *Connect-AzAccount* cmdlet to authenticate to my Azure tenant.
+In the **Edit PowerShell Runbook** window, I need to write code that will retrieve the information stored in **AzureRunAsConnection**. For this, I use the *Get-AutomationConnection* cmdlet and specify the name of the Run As connection. If I store the connection information to a variable, I can reference the tenant ID, application ID, and certificate thumbprint in the *Connect-AzAccount* cmdlet to authenticate to my Azure tenant.
 
 
 ```powershell
@@ -63,7 +61,9 @@ Connect-AzAccount -ServicePrincipal `
     -CertificateThumbprint $connection.CertificateThumbprint
 ```
 
-Once the runbook connects, I can now use other Az cmdlets to work with Azure resources. Since I imported the *Az.Resources* module, I can retrieve all my resource groups using the *Get-AzResourceGroup* cmdlet. If you do not remember the cmdlet to retrieve the Run As connection asset, remember you can expand *Assets* on the left to view saved connections and other assets. Selecting *Add to canvas* will insert the necessary PowerShell code.
+If you do not remember the cmdlet to retrieve the Run As connection asset, remember you can expand *Assets* on the left to view saved connections and other assets. Selecting *Add to canvas* will insert the necessary PowerShell code.
+
+Once the runbook connects, I can now use other Az cmdlets to work with Azure resources. Since I imported the *Az.Resources* module, I can retrieve all my resource groups using the *Get-AzResourceGroup* cmdlet. 
 
 ![Runbook code to connect to Azure](./images/runbook-code-to-azure.png)
 
@@ -89,7 +89,7 @@ Applications use a service principal to access resources secured by Azure AD. Th
 
 To create a service principal, navigate to Azure Active Directory in the Azure portal. In the **Manage** section, select **App registrations**. Select **+ New registration**, then input the application's name, support account type (for now, leave at the default), and redirect URI (this can be blank).
 
-After you create the app registration, on the **Overview** page, take note of the application ID and tenant ID. You will need this information later to create a new connection or credentials asset (see following sections). In the **Manage** section, you can navigate to **Certificates & secrets** to upload a certificate or generate a secret. You can then use either of these to authenticate out to Azure.
+After you create the app registration, on the **Overview** page, take note of the application ID and tenant ID. You will need this information later to create a new connection or credentials asset (see following sections). In the **Manage** section, you can navigate to **Certificates & secrets** to upload a certificate or generate a secret (essentially a password for the account). You can then use either of these to authenticate out to Azure.
 
 ### Create a New Connection Asset
 
@@ -101,7 +101,7 @@ Create a connection asset in the Automation Account by navigating to **Shared Re
 
 Finally, you can store security credentials as a shared resource. The credentials asset includes a username and password, and you can use these on cmdlets that accept a PSCredential object. In the Automation Account, navigate to **Shared Resources > Credentials** and select **+ Add a credential**. Name the credential and enter the username and password.
 
-Once you create the asset, you can retrieve the credentials using *Get-AutomationPSCredential* and store them in a variable. You then pass the credentials to the **Connect-AzAccount** cmdlet, like so:
+Once you create the asset, you can retrieve the credentials using *Get-AutomationPSCredential* and store it in a variable. You then pass the credentials to the **Connect-AzAccount** cmdlet, like so:
 
 ```PowerShell
 $creds = Get-AutomationPSCredential -Name '{CredentialAssetName}'
