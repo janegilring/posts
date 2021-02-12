@@ -25,7 +25,7 @@ Once created, you will associate the NSG with the NIC of a VM of choice. Select 
 
 You now successfully have associated your Network Security Group, with its default security rules, to your virtual machines network interface. When you open the NSG you've just created, you will see it's default rules. The rules permit all the hosts inside the virtual network to communicate between them, allows an Azure load balancer to communicate with your VM and send heartbeats, and denies any further inbound traffic. 
 
-![alt text](./img/Step1-3.png "Step1-3")	
+![alt text](./img/step1-3.png "Step1-3")	
 
 Based on the priority code (from low to high), lines at the top are processed first. When a rule is applicable, further rules will no longer be processed. In the example above, line 65001 will not be processed if the traffic is coming from the same virtual network, even if it is an Azure Load Balancer. In that case, 65000 is applicable, applied and further rules will be skipped. 
 
@@ -50,7 +50,7 @@ You now successfully created your first security rule within your Network Securi
 ### Block ping to cloudskills.io
 For educational purposes, you will configure the Network Security Group to deny all outbound ping traffic to the IP-adress of cloudskills.io. First, test the possibility to ping to cloudskills.io on your VM where the NSG is applied. It should allow you to ping cloudskills.io.
 
-![alt text](./img/step3-1 "Step3-1")
+![alt text](./img/step3-1.png "Step3-1")
 
 In your Network Security Group resource in the Azure Portal, select the "Outbound security rules" option from the settings list on the left, click on "Add" on the top, and fill in the parameters to deny the ping [(ICMP)](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/ping) traffic to the IP-adress of cloudskills.io. In our example, you'll be denying all traffic from any Source to the IP-adress of cloudskills.io.
 
