@@ -1,8 +1,8 @@
-# Creating a VM with a Uploaded Virtual Disk 
+# Creating a VM in Azure with a Uploaded Virtual Disk 
 
 ### Introduction
 
-I recently had the chance to play around with IX Systems NAS appliances and their storage operating system, TrueNAS. After installing it in a virtual machine and playing with some of the features, my interest was piqued. While scanning the product documentation, I noticed that there are instructions for deployment on AWS but none for Azure. I checked with support and they said there wasn't a technical limitation, they hadn't worked on getting it certified yet. That had me thinking about how how would I go about making this work in Azure.
+I recently had the chance to play around with IX Systems storage appliances and their storage operating system, TrueNAS. After installing it in a virtual machine and playing with some of the features, my interest was piqued. While scanning the product documentation, I noticed that there are instructions for deployment on AWS but none for Azure. I checked with support and they said there wasn't a technical limitation, they hadn't worked on getting it certified yet. That had me thinking about how how would I go about making this work in Azure.
 
 ### Goal
 
@@ -12,11 +12,11 @@ I took it upon myself to see if I could make a TrueNAS appliance in Azure. I've 
 
 Initially, I did some research on converting an existing VMware OVA image and getting that to work in Azure. After a few attempts, it became pretty apparent that this was more complicated than it needed to be.
 
-Next, I used Veeam to backup then restore a TrueNAS virtual machine from a VMware environment into Azure. This worked and I was able to connect to the OS and configure pools, etc. I didn't want everyone who wanted to run TrueNAS in Azure to go through the backup/restore process I needed something that was more portable.
+Next, I used Veeam to backup then restore a TrueNAS virtual machine from a VMware environment into Azure. This worked and I was able to connect to the OS and configure settings, but I didn't want everyone who wanted to run TrueNAS in Azure to go through the backup/restore process I needed something that was more portable.
 
-I tried creating a TrueNAS Hyper-V image to simplify the conversion and was able to convert the Hyper-V virtual disk into a disk image that can be used in Azure. I uploaded the disk and then built a virtual machine around it. After that, I turned it into a VMware image to deploy.
+I tried creating a TrueNAS Hyper-V image to simplify the conversion and was able to convert the Hyper-V virtual disk into a disk image that can be used in Azure. I uploaded the disk and then built a virtual machine around it. Then, I turned the virtual machine into an Azure Image for redeployment.
 
-This presented some deployment issues based on the script I'd cobbled together. The script would run, create the VM and then wait another 25 minutes before throwing an error message that ended up not affecting the VM. I worked on that for a while but couldn't find a solution so I simplified my process a bit.
+My image presented some deployment issues based on the script I'd cobbled together. The script would run, create the VM and then wait another 25 minutes before throwing an error message that ended up not affecting the VM. I worked on that for a while but couldn't find a solution so I simplified my process a bit.
 
 This time around I took the virtual disk created from the Hyper-V virtual machine and instead of worrying about creating an image I just cloned the disk this allowed me to just create the VM with a PowerShell script into my already existing tenant. I can now reproduce creating a basic TrueNAS virtual machine in Azure rather easily with my base disk.
 
