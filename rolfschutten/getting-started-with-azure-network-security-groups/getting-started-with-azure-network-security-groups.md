@@ -8,7 +8,7 @@ In this guide, you will learn what Azure Network Security Groups are, and how th
 
 ## Prerequisites 
 To get started with Azure Network Security Groups, you’ll need the following:
-* A Microsoft Azure account, where you have Owner, Contributor, or at least Network Contributor role privileges. To learn more about Role-Based Access Control, [see this link](https://docs.microsoft.com/en-us/azure/role-based-access-control/overview?WT.mc_id=thomasmaurer-blog-thmaure). 
+* A Microsoft Azure account, where you have Owner, Contributor, or at least Network Contributor role privileges. To learn more about Role-Based Access Control, [see this link](https://docs.microsoft.com/en-us/azure/role-based-access-control/overview). 
 * A properly configured virtual network. If you want to know how to create a virtual network in Azure, [see this link](https://docs.microsoft.com/en-us/azure/virtual-network/quick-create-template).
 * A virtual machine (VM) into a subnet.
 
@@ -48,11 +48,11 @@ To allow RDP traffic to the VM, you'll need to make a rule in the NSG that appli
 You now successfully created your first security rule within your Network Security Group. With this rule, you should now be able to connect to your VM using the RDP-protocol. As the Remote Desktop Protocol is constantly abused by malicious parties, you should remove this rule at the end of this guide, or right now. If you're looking for a service that provides secure and seamless RDP and SSH access to your virtual machines directly through the Azure Portal, you might want to consider [Azure Bastion](https://cloudskills.io/blog/azure-bastion).
 
 ### Block ping to cloudskills.io
-For educational purposes, you will configure the Network Security Group to deny all outbound ping traffic to the IP-adress of cloudskills.io. First, test the possibility to ping to cloudskills.io on your VM where the NSG is applied. It should allow you to ping cloudskills.io.
+For educational purposes, you will configure the Network Security Group to deny all outbound ping traffic to the IP-address of cloudskills.io. First, test the possibility to ping to cloudskills.io on your VM where the NSG is applied. It should allow you to ping cloudskills.io.
 
 ![alt text](./img/step3-1.png "Step3-1")
 
-In your Network Security Group resource in the Azure Portal, select the "Outbound security rules" option from the settings list on the left, click on "Add" on the top, and fill in the parameters to deny the ping [(ICMP)](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/ping) traffic to the IP-adress of cloudskills.io. In our example, you'll be denying all traffic from any Source to the IP-adress of cloudskills.io.
+In your Network Security Group resource in the Azure Portal, select the "Outbound security rules" option from the settings list on the left, click on "Add" on the top, and fill in the parameters to deny the ping [(ICMP)](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/ping) traffic to the IP-address of cloudskills.io. In our example, you'll be denying all traffic from any Source to the IP-address of cloudskills.io.
 
 To deny ICMP traffic to cloudskills.io, you'll need to make a rule in the NSG that applies before other rules that allow traffic. You'll need a priority higher than 65001. Furthermore, ICMP traffic has no port concept, so you'll want to apply the rule to all ports.
 
