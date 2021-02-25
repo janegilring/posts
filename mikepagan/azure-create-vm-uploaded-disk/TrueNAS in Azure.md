@@ -63,7 +63,7 @@ I also wanted to keep the OS disk small to keep the virtual disk costs low. To c
 
    Here you can see what the resize command and the get-vhd command output looks like: 
 
-   ![step-1-resize-vhd](images\step-1-resize-vhd.png)
+   ![step-1-resize-vhd](/images/step-1-resize-vhd.png)
 
    As you can see the Size is listed in bytes. For this to be a valid VHD that can be uploaded to Azure it needs to be divisible by 1 MiB (1 MiB = 1048576 bytes).
    $$
@@ -133,15 +133,15 @@ New-AzVM -ResourceGroupName $rgname -Location $location -VM $vm
 
 To create the VM, I used Visual Studio Code to edit and run the PowerShell script. 
 
-![step-2-edit-run-script](.\images\step-2-edit-run-script.png)
+![step-2-edit-run-script](/images/step-2-edit-run-script.png)
 
 The script ran successfully and as we can see it created the VM with the attributes we defined. 
 
-![step-3-vm-created](.\images\step-3-vm-created.png)
+![step-3-vm-created](/images/step-3-vm-created.png)
 
 From here you can you can add additional data or caching disk to create your storage pool. After that, connect to the management interface and login to configure your TrueNAS appliance settings using the credentials you defined when you created the VM.
 
-![step-4-truenas-logon](.\images\step-4-truenas-logon.png)
+![step-4-truenas-logon](/images/step-4-truenas-logon.png)
 
 ### Wrap up
 
