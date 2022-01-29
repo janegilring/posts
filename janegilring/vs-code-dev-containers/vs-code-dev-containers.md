@@ -151,7 +151,7 @@ When the build process has completed, you should see the folder opened like befo
 
 :::image type="content" source="images/step5-1-using-dev-container.png" alt-text="Using development container":::
 
-You can actually click on the green "Dev Container" buttom to bring up a menu with relevant options such as reopening the folder locally and so on:
+You can click on the green "Dev Container" button to bring up a menu with relevant options such as reopening the folder locally and so on:
 
 :::image type="content" source="images/step5-2-using-dev-container.png" alt-text="Using development container":::
 
